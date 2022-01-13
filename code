@@ -1,0 +1,271 @@
+
+#include <iostream>
+#include <vector>
+#include <list>
+#include <time.h>
+
+using namespace std;
+
+
+int const SIZE_IN_COPY_TESTS = 1000;
+int const AMOUNT_OF_COPIES = 100000;
+
+
+void vector_insert_first(vector<int>* v) {
+    v->insert(v->begin(), 1);
+}
+
+void vector_insert_last(vector<int>* v) {
+    v->push_back(1);
+}
+
+void vector_delete_first(vector<int>* v) {
+    v->erase(v->begin());
+}
+
+void vector_delete_last(vector<int>* v) {
+    v->pop_back();
+}
+
+void vector_insert_first_set_no_prealloc(int iterations) {
+    clock_t t;
+    vector<int> v;
+    cout << "Testing inserting at first position without preallocating memory\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        vector_insert_first(&v);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void vector_insert_first_set_prealloc(int iterations) {
+    clock_t t;
+    vector<int> v;
+    v.reserve(iterations);
+
+    cout << "Testing inserting at first position with preallocated memory\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        vector_insert_first(&v);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void vector_insert_last_set_no_prealloc(int iterations) {
+    clock_t t;
+    vector<int> v;
+    cout << "Testing inserting at last position without preallocating memory\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        vector_insert_last(&v);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void vector_insert_last_set_prealloc(int iterations) {
+    clock_t t;
+    vector<int> v;
+    v.reserve(iterations);
+
+    cout << "Testing inserting at last position with preallocated memory\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        vector_insert_last(&v);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void vector_delete_first_set(int iterations) {
+    clock_t t;
+    vector<int> v;
+    // populate vector
+    for (int i = 0; i < iterations; i++) {
+        vector_insert_last(&v);
+
+    }
+    cout << "Testing deleting at first position\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        vector_delete_first(&v);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void vector_delete_last_set(int iterations) {
+    clock_t t;
+    vector<int> v;
+    // populate vector
+    for (int i = 0; i < iterations; i++) {
+        vector_insert_last(&v);
+    }
+
+    cout << "Testing deleting at last position\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        vector_delete_last(&v);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void vector_copy_set(int iterations) {
+    clock_t t;
+    vector<int> v;
+
+    // populate vector
+    for (int i = 0; i < SIZE_IN_COPY_TESTS; i++) {
+        vector_insert_last(&v);
+
+    }
+    cout << "Vector size: " << v.size() << ". Amount of copies: " << iterations << ".\n";
+    cout << "Testing copying a vector\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        vector<int> v_copy;
+        v_copy = v;
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void vector_tests(int iterations) {
+
+    cout << "Testing vector operation speeds\n\n";
+    
+    // insert first no prealloc
+    vector_insert_first_set_no_prealloc(iterations);
+
+    // insert first prealloc
+    vector_insert_first_set_prealloc(iterations);
+
+    // insert last no prealloc
+    vector_insert_last_set_no_prealloc(iterations);
+
+    // insert first prealloc
+    vector_insert_last_set_prealloc(iterations);
+
+    // delete first
+    vector_delete_first_set(iterations);
+
+    // delete last
+    vector_delete_last_set(iterations);
+
+    // copy vector
+    vector_copy_set(AMOUNT_OF_COPIES);
+
+}
+
+void list_insert_first_set(int iterations) {
+    clock_t t;
+    list<int> l;
+    cout << "Testing inserting at first position\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        l.push_front(1);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void list_insert_last_set(int iterations) {
+    clock_t t;
+    list<int> l;
+    cout << "Testing inserting at last position\n";
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        l.push_back(1);
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void list_delete_first_set(int iterations) {
+    clock_t t;
+    list<int> l;
+    cout << "Testing deleting at first position\n";
+
+    // populate list
+    for (int i = 0; i < iterations; i++) {
+        l.push_front(1);
+    }
+
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        l.pop_front();
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void list_delete_last_set(int iterations) {
+    clock_t t;
+    list<int> l;
+    cout << "Testing deleting at last position\n";
+
+    // populate list
+    for (int i = 0; i < iterations; i++) {
+        l.push_front(1);
+    }
+
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        l.pop_back();
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void list_copy_set(int iterations) {
+    clock_t t;
+    list<int> l;
+    cout << "Testing copying a list\n";
+    // populate list
+    for (int i = 0; i < SIZE_IN_COPY_TESTS; i++) {
+        l.push_front(1);
+    }
+    cout << "List size: " << l.size() << ". Amount of copies: " << iterations << ".\n";
+
+    t = clock();
+    for (int i = 0; i < iterations; i++) {
+        list<int> l_copy;
+        l_copy = l;
+    }
+    t = clock() - t;
+    cout << "For " << iterations << " iterations if took " << (float(t)) / CLOCKS_PER_SEC << " seconds\n\n";
+}
+
+void list_tests(int iterations) {
+
+    cout << "Testing list operation speeds\n\n";
+
+    // insert first
+    list_insert_first_set(iterations);
+
+    // insert last
+    list_insert_last_set(iterations);
+
+    // delete first
+    list_delete_first_set(iterations);
+
+    // delete last
+    list_delete_last_set(iterations);
+
+    // copy list
+    list_copy_set(AMOUNT_OF_COPIES);
+
+}
+
+
+
+int main()
+{
+    int iterations = 1000000; // iterations are different and hardcoded (global variable) AMOUNT_OF_COPIES
+                              // for copy operations because of performance hit
+    vector_tests(iterations);
+    list_tests(iterations);
+}
